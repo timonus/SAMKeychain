@@ -252,7 +252,9 @@
 	static NSBundle *resourcesBundle = nil;
 	dispatch_once(&onceToken, ^{
 		NSURL *url = [[NSBundle bundleForClass:[self class]] URLForResource:@"SAMKeychain" withExtension:@"bundle"];
-		resourcesBundle = [NSBundle bundleWithURL:url];
+        if (url) {
+            resourcesBundle = [NSBundle bundleWithURL:url];
+        }
 	});
 	
 	NSString *message = nil;
