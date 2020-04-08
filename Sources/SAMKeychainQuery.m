@@ -158,13 +158,22 @@
 #pragma mark - Accessors
 
 - (void)setPasswordObject:(id<NSCoding>)object {
-	self.passwordData = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:nil];
+    if (@available(iOS 11.0, *)) {
+        self.passwordData = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:nil];
+    } else {
+        self.passwordData = [NSKeyedArchiver archivedDataWithRootObject:object];
+    }
 }
 
 
 - (id<NSCoding>)passwordObject {
 	if ([self.passwordData length]) {
-		return [NSKeyedUnarchiver unarchivedObjectOfClass:[NSObject class] fromData:self.passwordData error:nil];
+        if (@available(iOS 11.0, *)) {
+            return [NSKeyedUnarchiver unarchivedObjectOfClass:[NSObject class] fromData:self.passwordData error:nil];
+        } else {
+            return [NSKeyedUnarchiver unarchiveObjectWithData:self.passwordData];
+        }
+		
 	}
 	return nil;
 }
