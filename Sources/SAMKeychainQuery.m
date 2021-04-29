@@ -160,8 +160,10 @@
 - (void)setPasswordObject:(id<NSCoding>)object {
     if (@available(iOS 11.0, *)) {
         self.passwordData = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:nil];
+#if !defined(__IPHONE_12_0) || __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_12_0
     } else {
         self.passwordData = [NSKeyedArchiver archivedDataWithRootObject:object];
+#endif
     }
 }
 
@@ -170,8 +172,10 @@
 	if ([self.passwordData length]) {
         if (@available(iOS 11.0, *)) {
             return [NSKeyedUnarchiver unarchivedObjectOfClass:[NSObject class] fromData:self.passwordData error:nil];
+#if !defined(__IPHONE_12_0) || __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_12_0
         } else {
             return [NSKeyedUnarchiver unarchiveObjectWithData:self.passwordData];
+#endif
         }
 		
 	}
